@@ -5,7 +5,7 @@ title: "Code along crash course: test-driven development"
 Prerequisite:
 
 1. Participants have been introduced to test-driven development.
-2. Participants have forked the `segue` R package repository and created an R studio project form it. See `setup.qmd` for instructions
+2. Participants have forked the `segue` R package repository and created an R studio project form it. See [setup instructions](https://erc-segue.nl/tdd-r-pkg/setup.html).
 
 In groups of 2, including a domain expert and a participant with (some) development experience:
 

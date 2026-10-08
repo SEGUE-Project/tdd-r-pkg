@@ -7,7 +7,7 @@
 
 The repository contains:
 - A [presentation](presentation.qmd) with an introduction to test-driven R package development;
-- A [notebook](practical.qmd) describing the practical assignment to be carried out by the workshop participants.
+- A [notebook](https://erc-segue.nl/tdd-r-pkg/practical.html) describing the practical assignment to be carried out by the workshop participants.
 
 ## License
 
