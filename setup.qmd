@@ -1,0 +1,11 @@
+---
+title: "Setup"
+---
+
+Carry out these steps before starting test-driven development practical session:
+
+1. [Log in to GitHub](https://github.com/login). We assume you have an account, but, if you do not have one, you will have to [sign up](https://github.com/signup).
+2. Make sure that you have Git installed on your computer and that it is linked to GitHub using [these instructions](https://docs.github.com/en/get-started/git-basics/set-up-git).
+3. Fork the https://github.com/SEGUE-Project/segue repository to your personal account.
+4. Create an RStudio project from that fork from `File > New Project... > Version Control`.
+5. You are ready to start the practical session.
