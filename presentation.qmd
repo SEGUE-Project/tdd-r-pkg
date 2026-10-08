@@ -1,4 +1,52 @@
 ---
-title: Test-driven R package development
+title: Test-Driven R Package Development
 format: revealjs
+author:
+  - name: Claudiu Forgaci
+    orcid: 0000-0003-3218-5102
+    email: c.forgaci@tudelft.nl
+  - name: Ignacio Urria Yáñez
+    orcid: 0000-0003-3218-5102
+    email: I.A.UrriaYanez@tudelft.nl
 ---
+
+## Outline
+
+1. Why do we need tests?
+2. What kinds of tests are there?
+3. What is Test-Driven Development (TDD)?
+4. How is TDD specifically applied in R package development?
+5. Applying TDD in our package
+6. Roadmap
+
+## Why test?
+
+
+## Types of tests
+
+
+## Test-Driven Development (TDD)
+
+[Start with a non-TDD example and contrast it with a TDD example to show advantages and disadvantages of both; explain why we chose the latter in this workshop.]
+
+## TDD in R Packages
+
+<!-- - Data considerations: usage rights, size accepted by CRAN -->
+
+## Applying TDD in our package
+
+<!-- 1. In groups of 2, write statements to be used in the tests. Statements should follow the phrase “Test that …” -->
+<!-- ```r -->
+<!-- test_that("one plus one equals two [replace this with your statement]", { -->
+<!--     1 + 1 == 2 # Replace this line with your test -->
+<!-- }) -->
+<!-- ``` -->
+<!-- 2. Discuss what types of tests each of those tests will be. -->
+<!-- 3. Choose one test, implement it and try to make it pass. -->
+<!-- 4. Push your changes to GitHub and open a PR -->
+
+## Roadmap: what happens after this?
+
+- software design
+- refactoring
+- applying statistical standards

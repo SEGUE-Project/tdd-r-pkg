@@ -6,7 +6,7 @@
 > The teaching material in this repository is work in progress and it is being prepared for [the Rbanism workshop "Updating urban segregation computation with R"](https://erc-segue.nl/Workshop) as an introduction to its main outcome: an R package for urban segregation computation.
 
 The repository contains:
-- A [presentation](presentation.qmd) with an introduction to test-driven R package development;
+- A [presentation](https://erc-segue.nl/tdd-r-pkg/presentation.html) with an introduction to test-driven R package development;
 - A [notebook](https://erc-segue.nl/tdd-r-pkg/practical.html) describing the practical assignment to be carried out by the workshop participants.
 
 ## License
