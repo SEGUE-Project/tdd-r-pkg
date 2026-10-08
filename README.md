@@ -16,6 +16,6 @@ This repository uses two licenses:
 - **Code** (R source, tests, and other software) is licensed under the [Apache License 2.0](LICENSE-CODE).
 - **Workshop materials** (the presentation, notebook, prose, figures, and other non-code content) are licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE).
 
-Copyright (c) 2026 Rbanism and Claudiu Forgaci. When reusing the materials, please provide attribution to the original authors and link back to this repository.
+Copyright (c) 2026 Rbanism, Claudiu Forgaci and Ignacio Urria Yáñez. When reusing the materials, please provide attribution to the original authors and link back to this repository.
 
 
