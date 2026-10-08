@@ -1,5 +1,5 @@
 ---
-title: Code along crash course: test-driven development
+title: "Code along crash course: test-driven development"
 ---
 
 Prerequisite:
@@ -11,7 +11,7 @@ In groups of 2, including a domain expert and a participant with (some) developm
 
 1. Open the test file `tests/testthat/test-segue.R` and write your tests following the template given there. Start with the statements and then write the test code for 1-3 tests.
 
-```{r}
+```{r, eval=FALSE}
 # TODO add test data creation code here
 
 # TODO add example tests here
@@ -29,13 +29,13 @@ test_that("YOUR STATEMENT HERE", {
 
 2. Run the following code to confirm that the tests fail. This is normal.
 
-```{r}
+```{r, eval=FALSE}
 devtools::test()
 ```
 
 3. Open the module file `R/segue.R` and try to implement the function(s) that will help you pass the tests you wrote. Run the tests every time you want to check if the test passes.
 
-```{r}
+```{r, eval=FALSE}
 devtools::test()
 ```
 
