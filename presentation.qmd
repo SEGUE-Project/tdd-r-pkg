@@ -21,19 +21,36 @@ author:
 
 ## Why test?
 
+- Shift from *ad hoc* testing in the console to automated testing
+- Ensure code correctness
+- Reduce the chance of bugs
+- Anticipate how the code behaves with unexpected input 
+- Avoid making the same mistake again
+- Enforce good code structure
+- Make expectations explicit, even before code is written (we will do this)
 
 ## Types of tests
 
+- **Unit tests** check that each function / unit of code does what it is supposed to do given example input.
+- **Property-based (fuzz) tests** generate unexpected inputs with given properties.
+- **Mutation tests** introduce small changes ("mutations") in the code and checks if the tests catch them. If tests pass, you have found a bug!
+- **Code coverage** checks the percentage of lines of code covered by tests.
 
 ## Test-Driven Development (TDD)
 
-[Start with a non-TDD example and contrast it with a TDD example to show advantages and disadvantages of both; explain why we chose the latter in this workshop.]
+[Demo: start with a non-TDD example and contrast it with a TDD example to show advantages and disadvantages of both; explain why we chose the latter in this workshop.]
+
+> Test-driven development (TDD) is a way to write source code that involves writing an automated unit-level test case that fails, then writing just enough code to make the test pass, then refactoring both the test code and the production code, then repeating with another new test case.
 
 ## TDD in R Packages
 
-<!-- - Data considerations: usage rights, size accepted by CRAN -->
+- Writing the tests in `tests/testthat/` and the code in `R/`
+- Keeping code coverage high
+- Data considerations: usage rights, small size, working with synthetic data and mock tests
 
 ## Applying TDD in our package
+
+[Move to practical exercise]
 
 <!-- 1. In groups of 2, write statements to be used in the tests. Statements should follow the phrase “Test that …” -->
 <!-- ```r -->
@@ -49,4 +66,11 @@ author:
 
 - software design
 - refactoring
-- applying statistical standards
+- applying [statistical standards](https://stats-devguide.ropensci.org/)
+
+## Resources
+
+- [Testing basics in R](https://r-pkgs.org/testing-basics.html)
+- [Test-Driven Development in R](https://rstudio-pubs-static.s3.amazonaws.com/278724_4d8935a2955c49d9934e2113c737e70e.html)
+- [Unit-Testing And Test-driven Development (part of the Software Carpentry workshop FAIR-ifying R Software)](https://tibhannover.github.io/FAIR-R/05-testthat/)
+- [Video demonstration of test driven development in R with testthat](https://www.youtube.com/watch?app=desktop&v=TaNvqwMmHus)

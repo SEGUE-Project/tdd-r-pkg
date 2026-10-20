@@ -163,20 +163,43 @@ Ignacio Urria Yáñez <a href="https://orcid.org/0000-0003-3218-5102" class="qua
 </section>
 <section id="why-test" class="slide level2">
 <h2>Why test?</h2>
+<ul>
+<li>Shift from <em>ad hoc</em> testing in the console to automated testing</li>
+<li>Ensure code correctness</li>
+<li>Reduce the chance of bugs</li>
+<li>Anticipate how the code behaves with unexpected input</li>
+<li>Avoid making the same mistake again</li>
+<li>Enforce good code structure</li>
+<li>Make expectations explicit, even before code is written (we will do this)</li>
+</ul>
 </section>
 <section id="types-of-tests" class="slide level2">
 <h2>Types of tests</h2>
+<ul>
+<li><strong>Unit tests</strong> check that each function / unit of code does what it is supposed to do given example input.</li>
+<li><strong>Property-based (fuzz) tests</strong> generate unexpected inputs with given properties.</li>
+<li><strong>Mutation tests</strong> introduce small changes (“mutations”) in the code and checks if the tests catch them. If tests pass, you have found a bug!</li>
+<li><strong>Code coverage</strong> checks the percentage of lines of code covered by tests.</li>
+</ul>
 </section>
 <section id="test-driven-development-tdd" class="slide level2">
 <h2>Test-Driven Development (TDD)</h2>
-<p>[Start with a non-TDD example and contrast it with a TDD example to show advantages and disadvantages of both; explain why we chose the latter in this workshop.]</p>
+<p>[Demo: start with a non-TDD example and contrast it with a TDD example to show advantages and disadvantages of both; explain why we chose the latter in this workshop.]</p>
+<blockquote>
+<p>Test-driven development (TDD) is a way to write source code that involves writing an automated unit-level test case that fails, then writing just enough code to make the test pass, then refactoring both the test code and the production code, then repeating with another new test case.</p>
+</blockquote>
 </section>
 <section id="tdd-in-r-packages" class="slide level2">
 <h2>TDD in R Packages</h2>
-<!-- - Data considerations: usage rights, size accepted by CRAN -->
+<ul>
+<li>Writing the tests in <code>tests/testthat/</code> and the code in <code>R/</code></li>
+<li>Keeping code coverage high</li>
+<li>Data considerations: usage rights, small size, working with synthetic data and mock tests</li>
+</ul>
 </section>
 <section id="applying-tdd-in-our-package" class="slide level2">
 <h2>Applying TDD in our package</h2>
+<p>[Move to practical exercise]</p>
 <!-- 1. In groups of 2, write statements to be used in the tests. Statements should follow the phrase “Test that …” -->
 <!-- ```r -->
 <!-- test_that("one plus one equals two [replace this with your statement]", { -->
@@ -192,7 +215,16 @@ Ignacio Urria Yáñez <a href="https://orcid.org/0000-0003-3218-5102" class="qua
 <ul>
 <li>software design</li>
 <li>refactoring</li>
-<li>applying statistical standards</li>
+<li>applying <a href="https://stats-devguide.ropensci.org/">statistical standards</a></li>
+</ul>
+</section>
+<section id="resources" class="slide level2">
+<h2>Resources</h2>
+<ul>
+<li><a href="https://r-pkgs.org/testing-basics.html">Testing basics in R</a></li>
+<li><a href="https://rstudio-pubs-static.s3.amazonaws.com/278724_4d8935a2955c49d9934e2113c737e70e.html">Test-Driven Development in R</a></li>
+<li><a href="https://tibhannover.github.io/FAIR-R/05-testthat/">Unit-Testing And Test-driven Development (part of the Software Carpentry workshop FAIR-ifying R Software)</a></li>
+<li><a href="https://www.youtube.com/watch?app=desktop&amp;v=TaNvqwMmHus">Video demonstration of test driven development in R with testthat</a></li>
 </ul>
 
 </section>
