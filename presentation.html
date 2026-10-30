@@ -29,6 +29,72 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="presentation_files/libs/revealjs/dist/theme/quarto-534cd8e3a96973385dffff3f4709048d.css">
   <link href="presentation_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -182,12 +248,210 @@ Ignacio Urria Yáñez <a href="https://orcid.org/0000-0003-3218-5102" class="qua
 <li><strong>Code coverage</strong> checks the percentage of lines of code covered by tests.</li>
 </ul>
 </section>
+<section id="unit-tests-example" class="slide level2">
+<h2>Unit tests: example</h2>
+<p>The function to test, in <code>R/is_adult.R</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>is_adult <span class="ot">&lt;-</span> <span class="cf">function</span>(age) {</span>
+<span id="cb1-2"><a href=""></a>  age <span class="sc">&gt;=</span> <span class="dv">18</span></span>
+<span id="cb1-3"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The tests, in <code>tests/testthat/test-is_adult.R</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="fu">test_that</span>(<span class="st">"is_adult() recognises adults and minors"</span>, {</span>
+<span id="cb2-2"><a href=""></a>  <span class="fu">expect_true</span>(<span class="fu">is_adult</span>(<span class="dv">30</span>))</span>
+<span id="cb2-3"><a href=""></a>  <span class="fu">expect_false</span>(<span class="fu">is_adult</span>(<span class="dv">10</span>))</span>
+<span id="cb2-4"><a href=""></a>})</span>
+<span id="cb2-5"><a href=""></a></span>
+<span id="cb2-6"><a href=""></a><span class="fu">test_that</span>(<span class="st">"is_adult() treats 18 as an adult"</span>, {</span>
+<span id="cb2-7"><a href=""></a>  <span class="fu">expect_true</span>(<span class="fu">is_adult</span>(<span class="dv">18</span>))</span>
+<span id="cb2-8"><a href=""></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="property-based-tests-example" class="slide level2">
+<h2>Property-based tests: example</h2>
+<p>The function to test:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>rescale01 <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb3-2"><a href=""></a>  (x <span class="sc">-</span> <span class="fu">min</span>(x)) <span class="sc">/</span> (<span class="fu">max</span>(x) <span class="sc">-</span> <span class="fu">min</span>(x))</span>
+<span id="cb3-3"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Instead of fixed inputs, test a <strong>property</strong> on many generated inputs (here with the <a href="https://github.com/armcn/quickcheck">quickcheck</a> package):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">library</span>(quickcheck)</span>
+<span id="cb4-2"><a href=""></a></span>
+<span id="cb4-3"><a href=""></a><span class="fu">test_that</span>(<span class="st">"rescale01() returns values between 0 and 1"</span>, {</span>
+<span id="cb4-4"><a href=""></a>  <span class="fu">for_all</span>(</span>
+<span id="cb4-5"><a href=""></a>    <span class="at">x =</span> <span class="fu">numeric_</span>(<span class="at">len =</span> <span class="dv">5</span>),</span>
+<span id="cb4-6"><a href=""></a>    <span class="at">property =</span> <span class="cf">function</span>(x) {</span>
+<span id="cb4-7"><a href=""></a>      <span class="fu">expect_true</span>(<span class="fu">all</span>(<span class="fu">rescale01</span>(x) <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> <span class="fu">rescale01</span>(x) <span class="sc">&lt;=</span> <span class="dv">1</span>))</span>
+<span id="cb4-8"><a href=""></a>    }</span>
+<span id="cb4-9"><a href=""></a>  )</span>
+<span id="cb4-10"><a href=""></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Generated inputs can expose cases we did not think of, e.g.&nbsp;a constant vector (<code>max(x) == min(x)</code>) gives <code>NaN</code>.</p>
+</section>
+<section id="mutation-tests-example" class="slide level2">
+<h2>Mutation tests: example</h2>
+<p>A mutation tool makes a small change to the code and re-runs the tests:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="co"># Original</span></span>
+<span id="cb5-2"><a href=""></a>is_adult <span class="ot">&lt;-</span> <span class="cf">function</span>(age) age <span class="sc">&gt;=</span> <span class="dv">18</span></span>
+<span id="cb5-3"><a href=""></a></span>
+<span id="cb5-4"><a href=""></a><span class="co"># Mutant: "&gt;=" replaced by "&gt;"</span></span>
+<span id="cb5-5"><a href=""></a>is_adult <span class="ot">&lt;-</span> <span class="cf">function</span>(age) age <span class="sc">&gt;</span> <span class="dv">18</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>With only <code>expect_true(is_adult(30))</code> and <code>expect_false(is_adult(10))</code>, the tests still pass: the mutant <strong>survives</strong>, so the tests are too weak.</li>
+<li>Adding <code>expect_true(is_adult(18))</code> makes the tests fail on the mutant.</li>
+</ul>
+<p>Tools: <a href="https://github.com/jakubsob/muttest">muttest</a> for R.</p>
+</section>
+<section id="code-coverage-example" class="slide level2">
+<h2>Code coverage: example</h2>
+<p>Measure which lines of the package are run by the tests with the <a href="https://covr.r-lib.org/">covr</a> package:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a><span class="fu">library</span>(covr)</span>
+<span id="cb6-2"><a href=""></a></span>
+<span id="cb6-3"><a href=""></a>cov <span class="ot">&lt;-</span> <span class="fu">package_coverage</span>()</span>
+<span id="cb6-4"><a href=""></a>cov              <span class="co"># overall percentage and per-file summary</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>tdd-r-pkg Coverage: 85.71%
+R/is_adult.R: 100.00%
+R/rescale01.R: 66.67%</code></pre>
+<p>High coverage shows that code was <em>run</em>, not that it was <em>checked</em> properly.</p>
+</section>
 <section id="test-driven-development-tdd" class="slide level2">
 <h2>Test-Driven Development (TDD)</h2>
-<p>[Demo: start with a non-TDD example and contrast it with a TDD example to show advantages and disadvantages of both; explain why we chose the latter in this workshop.]</p>
-<blockquote>
-<p>Test-driven development (TDD) is a way to write source code that involves writing an automated unit-level test case that fails, then writing just enough code to make the test pass, then refactoring both the test code and the production code, then repeating with another new test case.</p>
-</blockquote>
+<p>Test-driven development (TDD) is a way to write source code that involves writing a test case that fails first, then writing just enough code to make the test pass, then refactoring both the test code and the production code, then repeating with another new test case.</p>
+</section>
+<section id="demo-the-task" class="slide level2">
+<h2>Demo: the task</h2>
+<p>Write <code>is_leap_year()</code>, which takes a year and returns <code>TRUE</code> if it is a leap year.</p>
+<p>We will solve it twice:</p>
+<ol type="1">
+<li>Code first, checking ad hoc in the console (non-TDD)</li>
+<li>Test first, in small steps (TDD)</li>
+</ol>
+</section>
+<section id="demo-without-tdd-code-first" class="slide level2">
+<h2>Demo without TDD: code first</h2>
+<div class="fragment">
+<p>Write the function:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a>is_leap_year <span class="ot">&lt;-</span> <span class="cf">function</span>(year) {</span>
+<span id="cb8-2"><a href=""></a>  year <span class="sc">%%</span> <span class="dv">4</span> <span class="sc">==</span> <span class="dv">0</span></span>
+<span id="cb8-3"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="fragment">
+<p>Check it in the console:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">is_leap_year</span>(<span class="dv">2024</span>)</span>
+<span id="cb9-2"><a href=""></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb9-3"><a href=""></a><span class="fu">is_leap_year</span>(<span class="dv">2023</span>)</span>
+<span id="cb9-4"><a href=""></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="fragment">
+<p>“It works!” … but:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="fu">is_leap_year</span>(<span class="dv">1900</span>)</span>
+<span id="cb10-2"><a href=""></a><span class="co">#&gt; [1] TRUE   # wrong: 1900 was not a leap year</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="fragment">
+<ul>
+<li>The edge case was only found by chance (or by a user, later)</li>
+<li>The console checks are not saved: nothing to re-run after a change</li>
+</ul>
+</div>
+</section>
+<section id="demo-with-tdd-fail" class="slide level2">
+<h2>Demo with TDD: fail</h2>
+<div class="fragment">
+<p>Write the test <strong>first</strong>, in <code>tests/testthat/test-is_leap_year.R</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a><span class="fu">test_that</span>(<span class="st">"is_leap_year() recognises leap and non-leap years"</span>, {</span>
+<span id="cb11-2"><a href=""></a>  <span class="fu">expect_true</span>(<span class="fu">is_leap_year</span>(<span class="dv">2024</span>))</span>
+<span id="cb11-3"><a href=""></a>  <span class="fu">expect_false</span>(<span class="fu">is_leap_year</span>(<span class="dv">2023</span>))</span>
+<span id="cb11-4"><a href=""></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="fragment">
+<p>Run it: it <strong>fails</strong> because the function does not exist yet.</p>
+<pre><code>Error: could not find function "is_leap_year"</code></pre>
+</div>
+</section>
+<section id="demo-with-tdd-pass" class="slide level2">
+<h2>Demo with TDD: pass</h2>
+<div class="fragment">
+<p>Write just enough code to make the test pass, in <code>R/is_leap_year.R</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a>is_leap_year <span class="ot">&lt;-</span> <span class="cf">function</span>(year) {</span>
+<span id="cb13-2"><a href=""></a>  year <span class="sc">%%</span> <span class="dv">4</span> <span class="sc">==</span> <span class="dv">0</span></span>
+<span id="cb13-3"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="fragment">
+<p>The test passes. Now ask: <em>what else should be true?</em> Add the next test:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="fu">test_that</span>(<span class="st">"is_leap_year() handles century years"</span>, {</span>
+<span id="cb14-2"><a href=""></a>  <span class="fu">expect_false</span>(<span class="fu">is_leap_year</span>(<span class="dv">1900</span>))</span>
+<span id="cb14-3"><a href=""></a>  <span class="fu">expect_true</span>(<span class="fu">is_leap_year</span>(<span class="dv">2000</span>))</span>
+<span id="cb14-4"><a href=""></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>It <strong>fails</strong> on 1900. The edge case is found <em>before</em> the code ships.</p>
+</div>
+</section>
+<section id="demo-with-tdd-pass-again-then-refactor" class="slide level2">
+<h2>Demo with TDD: pass again, then refactor</h2>
+<div class="fragment">
+<p>Make the new test pass:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a>is_leap_year <span class="ot">&lt;-</span> <span class="cf">function</span>(year) {</span>
+<span id="cb15-2"><a href=""></a>  (year <span class="sc">%%</span> <span class="dv">4</span> <span class="sc">==</span> <span class="dv">0</span> <span class="sc">&amp;</span> year <span class="sc">%%</span> <span class="dv">100</span> <span class="sc">!=</span> <span class="dv">0</span>) <span class="sc">|</span> year <span class="sc">%%</span> <span class="dv">400</span> <span class="sc">==</span> <span class="dv">0</span></span>
+<span id="cb15-3"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="fragment">
+<p>All tests pass. Refactor with a safety net, re-running the tests after each change:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a>is_leap_year <span class="ot">&lt;-</span> <span class="cf">function</span>(year) {</span>
+<span id="cb16-2"><a href=""></a>  divisible_by <span class="ot">&lt;-</span> <span class="cf">function</span>(n) year <span class="sc">%%</span> n <span class="sc">==</span> <span class="dv">0</span></span>
+<span id="cb16-3"><a href=""></a>  (<span class="fu">divisible_by</span>(<span class="dv">4</span>) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">divisible_by</span>(<span class="dv">100</span>)) <span class="sc">|</span> <span class="fu">divisible_by</span>(<span class="dv">400</span>)</span>
+<span id="cb16-4"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="demo-non-tdd-vs-tdd" class="slide level2">
+<h2>Demo: non-TDD vs TDD</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Without TDD</th>
+<th>With TDD</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Speed at the start</td>
+<td>Faster</td>
+<td>Slower: tests come first</td>
+</tr>
+<tr class="even">
+<td>Edge cases</td>
+<td>Found by chance, if at all</td>
+<td>Prompted by writing tests</td>
+</tr>
+<tr class="odd">
+<td>Checks are saved</td>
+<td>No (console)</td>
+<td>Yes (re-run any time)</td>
+</tr>
+<tr class="even">
+<td>Refactoring</td>
+<td>Risky</td>
+<td>Safe, backed by tests</td>
+</tr>
+<tr class="odd">
+<td>Design</td>
+<td>Shaped by the implementation</td>
+<td>Shaped by how the code is used</td>
+</tr>
+<tr class="even">
+<td>Effort</td>
+<td>Less upfront</td>
+<td>More upfront, less debugging later</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="why-tdd-in-this-workshop" class="slide level2">
+<h2>Why TDD in this workshop?</h2>
+<ul>
+<li>Writing the test first makes our expectations explicit before any code exists</li>
+<li>It lets us practise the fail-pass-refactor cycle in small steps</li>
+<li>The tests we write remain in the package and protect it as it grows</li>
+</ul>
 </section>
 <section id="tdd-in-r-packages" class="slide level2">
 <h2>TDD in R Packages</h2>
@@ -197,25 +461,17 @@ Ignacio Urria Yáñez <a href="https://orcid.org/0000-0003-3218-5102" class="qua
 <li>Data considerations: usage rights, small size, working with synthetic data and mock tests</li>
 </ul>
 </section>
-<section id="applying-tdd-in-our-package" class="slide level2">
-<h2>Applying TDD in our package</h2>
-<p>[Move to practical exercise]</p>
-<!-- 1. In groups of 2, write statements to be used in the tests. Statements should follow the phrase “Test that …” -->
-<!-- ```r -->
-<!-- test_that("one plus one equals two [replace this with your statement]", { -->
-<!--     1 + 1 == 2 # Replace this line with your test -->
-<!-- }) -->
-<!-- ``` -->
-<!-- 2. Discuss what types of tests each of those tests will be. -->
-<!-- 3. Choose one test, implement it and try to make it pass. -->
-<!-- 4. Push your changes to GitHub and open a PR -->
+<section>
+<section id="time-to-apply-tdd-in-our-package" class="title-slide slide level1 center">
+<h1>Time to apply TDD in our package</h1>
+
 </section>
 <section id="roadmap-what-happens-after-this" class="slide level2">
 <h2>Roadmap: what happens after this?</h2>
 <ul>
-<li>software design</li>
-<li>refactoring</li>
-<li>applying <a href="https://stats-devguide.ropensci.org/">statistical standards</a></li>
+<li>Software design</li>
+<li>Refactoring</li>
+<li>Applying <a href="https://stats-devguide.ropensci.org/">statistical standards</a></li>
 </ul>
 </section>
 <section id="resources" class="slide level2">
@@ -227,7 +483,7 @@ Ignacio Urria Yáñez <a href="https://orcid.org/0000-0003-3218-5102" class="qua
 <li><a href="https://www.youtube.com/watch?app=desktop&amp;v=TaNvqwMmHus">Video demonstration of test driven development in R with testthat</a></li>
 </ul>
 
-</section>
+</section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
@@ -264,7 +520,7 @@ Ignacio Urria Yáñez <a href="https://orcid.org/0000-0003-3218-5102" class="qua
 'autoAnimateUnmatched': true,
 'jumpToSlide': true,
 'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
-'smaller': false,
+'smaller': true,
  
         // Display controls in the bottom right corner
         controls: false,

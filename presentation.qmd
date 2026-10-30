@@ -1,6 +1,8 @@
 ---
 title: Test-Driven R Package Development
-format: revealjs
+format:
+  revealjs:
+    smaller: true
 author:
   - name: Claudiu Forgaci
     orcid: 0000-0003-3218-5102
@@ -36,11 +38,230 @@ author:
 - **Mutation tests** introduce small changes ("mutations") in the code and checks if the tests catch them. If tests pass, you have found a bug!
 - **Code coverage** checks the percentage of lines of code covered by tests.
 
+## Unit tests: example
+
+The function to test, in `R/is_adult.R`:
+
+```r
+is_adult <- function(age) {
+  age >= 18
+}
+```
+
+The tests, in `tests/testthat/test-is_adult.R`:
+
+```r
+test_that("is_adult() recognises adults and minors", {
+  expect_true(is_adult(30))
+  expect_false(is_adult(10))
+})
+
+test_that("is_adult() treats 18 as an adult", {
+  expect_true(is_adult(18))
+})
+```
+
+## Property-based tests: example
+
+The function to test:
+
+```r
+rescale01 <- function(x) {
+  (x - min(x)) / (max(x) - min(x))
+}
+```
+
+Instead of fixed inputs, test a **property** on many generated inputs
+(here with the [quickcheck](https://github.com/armcn/quickcheck) package):
+
+```r
+library(quickcheck)
+
+test_that("rescale01() returns values between 0 and 1", {
+  for_all(
+    x = numeric_(len = 5),
+    property = function(x) {
+      expect_true(all(rescale01(x) >= 0 & rescale01(x) <= 1))
+    }
+  )
+})
+```
+
+Generated inputs can expose cases we did not think of, e.g. a constant vector
+(`max(x) == min(x)`) gives `NaN`.
+
+## Mutation tests: example
+
+A mutation tool makes a small change to the code and re-runs the tests:
+
+```r
+# Original
+is_adult <- function(age) age >= 18
+
+# Mutant: ">=" replaced by ">"
+is_adult <- function(age) age > 18
+```
+
+- With only `expect_true(is_adult(30))` and `expect_false(is_adult(10))`, the tests still pass: the mutant **survives**, so the tests are too weak.
+- Adding `expect_true(is_adult(18))` makes the tests fail on the mutant.
+
+Tools: [muttest](https://github.com/jakubsob/muttest) for R.
+
+## Code coverage: example
+
+Measure which lines of the package are run by the tests with the
+[covr](https://covr.r-lib.org/) package:
+
+```r
+library(covr)
+
+cov <- package_coverage()
+cov              # overall percentage and per-file summary
+```
+
+```
+tdd-r-pkg Coverage: 85.71%
+R/is_adult.R: 100.00%
+R/rescale01.R: 66.67%
+```
+
+High coverage shows that code was *run*, not that it was *checked* properly.
+
 ## Test-Driven Development (TDD)
 
-[Demo: start with a non-TDD example and contrast it with a TDD example to show advantages and disadvantages of both; explain why we chose the latter in this workshop.]
+Test-driven development (TDD) is a way to write source code that involves writing a test case that fails first, then writing just enough code to make the test pass, then refactoring both the test code and the production code, then repeating with another new test case.
 
-> Test-driven development (TDD) is a way to write source code that involves writing an automated unit-level test case that fails, then writing just enough code to make the test pass, then refactoring both the test code and the production code, then repeating with another new test case.
+## Demo: the task
+
+Write `is_leap_year()`, which takes a year and returns `TRUE` if it is a leap year.
+
+We will solve it twice:
+
+1. Code first, checking ad hoc in the console (non-TDD)
+2. Test first, in small steps (TDD)
+
+## Demo without TDD: code first
+
+:::{.fragment}
+Write the function:
+
+```r
+is_leap_year <- function(year) {
+  year %% 4 == 0
+}
+```
+:::
+
+:::{.fragment}
+Check it in the console:
+
+```r
+is_leap_year(2024)
+#> [1] TRUE
+is_leap_year(2023)
+#> [1] FALSE
+```
+:::
+
+:::{.fragment}
+"It works!" ... but:
+
+```r
+is_leap_year(1900)
+#> [1] TRUE   # wrong: 1900 was not a leap year
+```
+:::
+
+:::{.fragment}
+- The edge case was only found by chance (or by a user, later)
+- The console checks are not saved: nothing to re-run after a change
+:::
+
+## Demo with TDD: fail
+
+:::{.fragment}
+Write the test **first**, in `tests/testthat/test-is_leap_year.R`:
+
+```r
+test_that("is_leap_year() recognises leap and non-leap years", {
+  expect_true(is_leap_year(2024))
+  expect_false(is_leap_year(2023))
+})
+```
+:::
+
+:::{.fragment}
+Run it: it **fails** because the function does not exist yet.
+
+```
+Error: could not find function "is_leap_year"
+```
+:::
+
+## Demo with TDD: pass
+
+:::{.fragment}
+Write just enough code to make the test pass, in `R/is_leap_year.R`:
+
+```r
+is_leap_year <- function(year) {
+  year %% 4 == 0
+}
+```
+:::
+
+:::{.fragment}
+The test passes. Now ask: *what else should be true?* Add the next test:
+
+```r
+test_that("is_leap_year() handles century years", {
+  expect_false(is_leap_year(1900))
+  expect_true(is_leap_year(2000))
+})
+```
+
+It **fails** on 1900. The edge case is found *before* the code ships.
+:::
+
+## Demo with TDD: pass again, then refactor
+
+:::{.fragment}
+Make the new test pass:
+
+```r
+is_leap_year <- function(year) {
+  (year %% 4 == 0 & year %% 100 != 0) | year %% 400 == 0
+}
+```
+:::
+
+:::{.fragment}
+All tests pass. Refactor with a safety net, re-running the tests after each change:
+
+```r
+is_leap_year <- function(year) {
+  divisible_by <- function(n) year %% n == 0
+  (divisible_by(4) & !divisible_by(100)) | divisible_by(400)
+}
+```
+:::
+
+## Demo: non-TDD vs TDD
+
+| | Without TDD | With TDD |
+|---|---|---|
+| Speed at the start | Faster | Slower: tests come first |
+| Edge cases | Found by chance, if at all | Prompted by writing tests |
+| Checks are saved | No (console) | Yes (re-run any time) |
+| Refactoring | Risky | Safe, backed by tests |
+| Design | Shaped by the implementation | Shaped by how the code is used |
+| Effort | Less upfront | More upfront, less debugging later |
+
+## Why TDD in this workshop?
+
+- Writing the test first makes our expectations explicit before any code exists
+- It lets us practise the fail-pass-refactor cycle in small steps
+- The tests we write remain in the package and protect it as it grows
 
 ## TDD in R Packages
 
@@ -48,25 +269,13 @@ author:
 - Keeping code coverage high
 - Data considerations: usage rights, small size, working with synthetic data and mock tests
 
-## Applying TDD in our package
-
-[Move to practical exercise]
-
-<!-- 1. In groups of 2, write statements to be used in the tests. Statements should follow the phrase “Test that …” -->
-<!-- ```r -->
-<!-- test_that("one plus one equals two [replace this with your statement]", { -->
-<!--     1 + 1 == 2 # Replace this line with your test -->
-<!-- }) -->
-<!-- ``` -->
-<!-- 2. Discuss what types of tests each of those tests will be. -->
-<!-- 3. Choose one test, implement it and try to make it pass. -->
-<!-- 4. Push your changes to GitHub and open a PR -->
+# Time to apply TDD in our package
 
 ## Roadmap: what happens after this?
 
-- software design
-- refactoring
-- applying [statistical standards](https://stats-devguide.ropensci.org/)
+- Software design
+- Refactoring
+- Applying [statistical standards](https://stats-devguide.ropensci.org/)
 
 ## Resources
 
