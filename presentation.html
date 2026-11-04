@@ -233,10 +233,18 @@ Ignacio Urria Yáñez <a href="https://orcid.org/0000-0003-3218-5102" class="qua
 <li>Shift from <em>ad hoc</em> testing in the console to automated testing</li>
 <li>Ensure code correctness</li>
 <li>Reduce the chance of bugs</li>
+<li>Prevent regression and ensure continuity</li>
 <li>Anticipate how the code behaves with unexpected input</li>
 <li>Avoid making the same mistake again</li>
 <li>Enforce good code structure</li>
 <li>Make expectations explicit, even before code is written (we will do this)</li>
+</ul>
+<br><br>
+<h4>
+When not to test?
+</h4>
+<ul>
+<li>During exploratory analysis, one-off code, when cost of testing outweighs its benefits.</li>
 </ul>
 </section>
 <section id="types-of-tests" class="slide level2">
@@ -245,11 +253,20 @@ Ignacio Urria Yáñez <a href="https://orcid.org/0000-0003-3218-5102" class="qua
 <li><strong>Unit tests</strong> check that each function / unit of code does what it is supposed to do given example input.</li>
 <li><strong>Property-based (fuzz) tests</strong> generate unexpected inputs with given properties.</li>
 <li><strong>Mutation tests</strong> introduce small changes (“mutations”) in the code and checks if the tests catch them. If tests pass, you have found a bug!</li>
+</ul>
+<br><br>
+<h4>
+Useful metric for testing
+</h4>
+<ul>
 <li><strong>Code coverage</strong> checks the percentage of lines of code covered by tests.</li>
 </ul>
 </section>
 <section id="unit-tests-example" class="slide level2">
 <h2>Unit tests: example</h2>
+<blockquote>
+<p><strong>Unit tests</strong> check that each function / unit of code does what it is supposed to do given example input.</p>
+</blockquote>
 <p>The function to test, in <code>R/is_adult.R</code>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>is_adult <span class="ot">&lt;-</span> <span class="cf">function</span>(age) {</span>
 <span id="cb1-2"><a href=""></a>  age <span class="sc">&gt;=</span> <span class="dv">18</span></span>
@@ -266,6 +283,9 @@ Ignacio Urria Yáñez <a href="https://orcid.org/0000-0003-3218-5102" class="qua
 </section>
 <section id="property-based-tests-example" class="slide level2">
 <h2>Property-based tests: example</h2>
+<blockquote>
+<p><strong>Property-based (fuzz) tests</strong> generate unexpected inputs with given properties.</p>
+</blockquote>
 <p>The function to test:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>rescale01 <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
 <span id="cb3-2"><a href=""></a>  (x <span class="sc">-</span> <span class="fu">min</span>(x)) <span class="sc">/</span> (<span class="fu">max</span>(x) <span class="sc">-</span> <span class="fu">min</span>(x))</span>
@@ -285,6 +305,9 @@ Ignacio Urria Yáñez <a href="https://orcid.org/0000-0003-3218-5102" class="qua
 </section>
 <section id="mutation-tests-example" class="slide level2">
 <h2>Mutation tests: example</h2>
+<blockquote>
+<p><strong>Mutation tests</strong> introduce small changes (“mutations”) in the code and checks if the tests catch them. If tests pass, you have found a bug!</p>
+</blockquote>
 <p>A mutation tool makes a small change to the code and re-runs the tests:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="co"># Original</span></span>
 <span id="cb5-2"><a href=""></a>is_adult <span class="ot">&lt;-</span> <span class="cf">function</span>(age) age <span class="sc">&gt;=</span> <span class="dv">18</span></span>
@@ -307,7 +330,7 @@ Ignacio Urria Yáñez <a href="https://orcid.org/0000-0003-3218-5102" class="qua
 <pre><code>tdd-r-pkg Coverage: 85.71%
 R/is_adult.R: 100.00%
 R/rescale01.R: 66.67%</code></pre>
-<p>High coverage shows that code was <em>run</em>, not that it was <em>checked</em> properly.</p>
+<p>High coverage shows that code was <em>run</em>, not that it was <em>checked</em> properly. High coverage is no necessarily equivalent to correct behaviour.</p>
 </section>
 <section id="test-driven-development-tdd" class="slide level2">
 <h2>Test-Driven Development (TDD)</h2>
@@ -347,6 +370,11 @@ R/rescale01.R: 66.67%</code></pre>
 <li>The edge case was only found by chance (or by a user, later)</li>
 <li>The console checks are not saved: nothing to re-run after a change</li>
 </ul>
+</div>
+<div class="fragment">
+<div class="note">
+<p>Note that with existing code you would start implementing automated testing, useful, most commonly recommended, more than TDD.</p>
+</div>
 </div>
 </section>
 <section id="demo-with-tdd-fail" class="slide level2">
@@ -395,6 +423,14 @@ R/rescale01.R: 66.67%</code></pre>
 <span id="cb16-3"><a href=""></a>  (<span class="fu">divisible_by</span>(<span class="dv">4</span>) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">divisible_by</span>(<span class="dv">100</span>)) <span class="sc">|</span> <span class="fu">divisible_by</span>(<span class="dv">400</span>)</span>
 <span id="cb16-4"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+</section>
+<section id="writing-tests-with-genai" class="slide level2">
+<h2>Writing tests with GenAI</h2>
+<ul>
+<li>Effective in normal automated testing when functions to be tested are already written.</li>
+<li>Useful for creating simple synthetic data for tests.</li>
+<li>Potentially useful in TDD to scaffold a test, but you need to (be able to) check and adjust if needed.</li>
+</ul>
 </section>
 <section id="demo-non-tdd-vs-tdd" class="slide level2">
 <h2>Demo: non-TDD vs TDD</h2>

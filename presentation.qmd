@@ -26,19 +26,31 @@ author:
 - Shift from *ad hoc* testing in the console to automated testing
 - Ensure code correctness
 - Reduce the chance of bugs
+- Prevent regression and ensure continuity
 - Anticipate how the code behaves with unexpected input 
 - Avoid making the same mistake again
 - Enforce good code structure
 - Make expectations explicit, even before code is written (we will do this)
+
+<br><br>
+<h4>When not to test?</h4>
+
+- During exploratory analysis, one-off code, when cost of testing outweighs its benefits.
 
 ## Types of tests
 
 - **Unit tests** check that each function / unit of code does what it is supposed to do given example input.
 - **Property-based (fuzz) tests** generate unexpected inputs with given properties.
 - **Mutation tests** introduce small changes ("mutations") in the code and checks if the tests catch them. If tests pass, you have found a bug!
+
+<br><br>
+<h4>Useful metric for testing</h4>
+
 - **Code coverage** checks the percentage of lines of code covered by tests.
 
 ## Unit tests: example
+
+> **Unit tests** check that each function / unit of code does what it is supposed to do given example input.
 
 The function to test, in `R/is_adult.R`:
 
@@ -62,6 +74,8 @@ test_that("is_adult() treats 18 as an adult", {
 ```
 
 ## Property-based tests: example
+
+> **Property-based (fuzz) tests** generate unexpected inputs with given properties.
 
 The function to test:
 
@@ -91,6 +105,8 @@ Generated inputs can expose cases we did not think of, e.g. a constant vector
 (`max(x) == min(x)`) gives `NaN`.
 
 ## Mutation tests: example
+
+> **Mutation tests** introduce small changes ("mutations") in the code and checks if the tests catch them. If tests pass, you have found a bug!
 
 A mutation tool makes a small change to the code and re-runs the tests:
 
@@ -125,7 +141,7 @@ R/is_adult.R: 100.00%
 R/rescale01.R: 66.67%
 ```
 
-High coverage shows that code was *run*, not that it was *checked* properly.
+High coverage shows that code was *run*, not that it was *checked* properly. High coverage is no necessarily equivalent to correct behaviour.
 
 ## Test-Driven Development (TDD)
 
@@ -175,6 +191,12 @@ is_leap_year(1900)
 :::{.fragment}
 - The edge case was only found by chance (or by a user, later)
 - The console checks are not saved: nothing to re-run after a change
+:::
+
+:::{.fragment}
+:::{.note}
+Note that with existing code you would start implementing automated testing, useful, most commonly recommended, more than TDD.
+:::
 :::
 
 ## Demo with TDD: fail
@@ -245,6 +267,12 @@ is_leap_year <- function(year) {
 }
 ```
 :::
+
+## Writing tests with GenAI
+
+- Effective in normal automated testing when functions to be tested are already written.
+- Useful for creating simple synthetic data for tests.
+- Potentially useful in TDD to scaffold a test, but you need to (be able to) check and adjust if needed.
 
 ## Demo: non-TDD vs TDD
 
