@@ -14,35 +14,35 @@ author:
 
 ## Outline
 
-1. Why do we need tests?
-2. What kinds of tests are there?
-3. What is Test-Driven Development (TDD)?
-4. How is TDD specifically applied in R package development?
-5. Applying TDD in our package
-6. Roadmap
+1.  Why do we need tests?
+2.  What kinds of tests are there?
+3.  What is Test-Driven Development (TDD)?
+4.  How is TDD specifically applied in R package development?
+5.  Applying TDD in our package
+6.  Roadmap
 
 ## Why test?
 
-- Shift from *ad hoc* testing in the console to automated testing
-- Ensure code correctness
-- Reduce the chance of bugs
-- Anticipate how the code behaves with unexpected input 
-- Avoid making the same mistake again
-- Enforce good code structure
-- Make expectations explicit, even before code is written (we will do this)
+-   Shift from *ad hoc* testing in the console to automated testing
+-   Ensure code correctness
+-   Reduce the chance of bugs
+-   Anticipate how the code behaves with unexpected input
+-   Avoid making the same mistake again
+-   Enforce good code structure
+-   Make expectations explicit, even before code is written (we will do this)
 
 ## Types of tests
 
-- **Unit tests** check that each function / unit of code does what it is supposed to do given example input.
-- **Property-based (fuzz) tests** generate unexpected inputs with given properties.
-- **Mutation tests** introduce small changes ("mutations") in the code and checks if the tests catch them. If tests pass, you have found a bug!
-- **Code coverage** checks the percentage of lines of code covered by tests.
+-   **Unit tests** check that each function / unit of code does what it is supposed to do given example input.
+-   **Property-based (fuzz) tests** generate unexpected inputs with given properties.
+-   **Mutation tests** introduce small changes ("mutations") in the code and checks if the tests catch them. If tests pass, you have found a bug!
+-   **Code coverage** checks the percentage of lines of code covered by tests.
 
 ## Unit tests: example
 
 The function to test, in `R/is_adult.R`:
 
-```r
+``` r
 is_adult <- function(age) {
   age >= 18
 }
@@ -50,7 +50,7 @@ is_adult <- function(age) {
 
 The tests, in `tests/testthat/test-is_adult.R`:
 
-```r
+``` r
 test_that("is_adult() recognises adults and minors", {
   expect_true(is_adult(30))
   expect_false(is_adult(10))
@@ -65,16 +65,15 @@ test_that("is_adult() treats 18 as an adult", {
 
 The function to test:
 
-```r
+``` r
 rescale01 <- function(x) {
   (x - min(x)) / (max(x) - min(x))
 }
 ```
 
-Instead of fixed inputs, test a **property** on many generated inputs
-(here with the [quickcheck](https://github.com/armcn/quickcheck) package):
+Instead of fixed inputs, test a **property** on many generated inputs (here with the [quickcheck](https://github.com/armcn/quickcheck) package):
 
-```r
+``` r
 library(quickcheck)
 
 test_that("rescale01() returns values between 0 and 1", {
@@ -87,14 +86,13 @@ test_that("rescale01() returns values between 0 and 1", {
 })
 ```
 
-Generated inputs can expose cases we did not think of, e.g. a constant vector
-(`max(x) == min(x)`) gives `NaN`.
+Generated inputs can expose cases we did not think of, e.g. a constant vector (`max(x) == min(x)`) gives `NaN`.
 
 ## Mutation tests: example
 
 A mutation tool makes a small change to the code and re-runs the tests:
 
-```r
+``` r
 # Original
 is_adult <- function(age) age >= 18
 
@@ -102,24 +100,23 @@ is_adult <- function(age) age >= 18
 is_adult <- function(age) age > 18
 ```
 
-- With only `expect_true(is_adult(30))` and `expect_false(is_adult(10))`, the tests still pass: the mutant **survives**, so the tests are too weak.
-- Adding `expect_true(is_adult(18))` makes the tests fail on the mutant.
+-   With only `expect_true(is_adult(30))` and `expect_false(is_adult(10))`, the tests still pass: the mutant **survives**, so the tests are too weak.
+-   Adding `expect_true(is_adult(18))` makes the tests fail on the mutant.
 
 Tools: [muttest](https://github.com/jakubsob/muttest) for R.
 
 ## Code coverage: example
 
-Measure which lines of the package are run by the tests with the
-[covr](https://covr.r-lib.org/) package:
+Measure which lines of the package are run by the tests with the [covr](https://covr.r-lib.org/) package:
 
-```r
+``` r
 library(covr)
 
 cov <- package_coverage()
 cov              # overall percentage and per-file summary
 ```
 
-```
+```         
 tdd-r-pkg Coverage: 85.71%
 R/is_adult.R: 100.00%
 R/rescale01.R: 66.67%
@@ -137,25 +134,25 @@ Write `is_leap_year()`, which takes a year and returns `TRUE` if it is a leap ye
 
 We will solve it twice:
 
-1. Code first, checking ad hoc in the console (non-TDD)
-2. Test first, in small steps (TDD)
+1.  Code first, checking ad hoc in the console (non-TDD)
+2.  Test first, in small steps (TDD)
 
 ## Demo without TDD: code first
 
-:::{.fragment}
+::: fragment
 Write the function:
 
-```r
+``` r
 is_leap_year <- function(year) {
   year %% 4 == 0
 }
 ```
 :::
 
-:::{.fragment}
+::: fragment
 Check it in the console:
 
-```r
+``` r
 is_leap_year(2024)
 #> [1] TRUE
 is_leap_year(2023)
@@ -163,26 +160,26 @@ is_leap_year(2023)
 ```
 :::
 
-:::{.fragment}
+::: fragment
 "It works!" ... but:
 
-```r
+``` r
 is_leap_year(1900)
 #> [1] TRUE   # wrong: 1900 was not a leap year
 ```
 :::
 
-:::{.fragment}
-- The edge case was only found by chance (or by a user, later)
-- The console checks are not saved: nothing to re-run after a change
+::: fragment
+-   The edge case was only found by chance (or by a user, later)
+-   The console checks are not saved: nothing to re-run after a change
 :::
 
 ## Demo with TDD: fail
 
-:::{.fragment}
+::: fragment
 Write the test **first**, in `tests/testthat/test-is_leap_year.R`:
 
-```r
+``` r
 test_that("is_leap_year() recognises leap and non-leap years", {
   expect_true(is_leap_year(2024))
   expect_false(is_leap_year(2023))
@@ -190,30 +187,30 @@ test_that("is_leap_year() recognises leap and non-leap years", {
 ```
 :::
 
-:::{.fragment}
+::: fragment
 Run it: it **fails** because the function does not exist yet.
 
-```
+```         
 Error: could not find function "is_leap_year"
 ```
 :::
 
 ## Demo with TDD: pass
 
-:::{.fragment}
+::: fragment
 Write just enough code to make the test pass, in `R/is_leap_year.R`:
 
-```r
+``` r
 is_leap_year <- function(year) {
   year %% 4 == 0
 }
 ```
 :::
 
-:::{.fragment}
+::: fragment
 The test passes. Now ask: *what else should be true?* Add the next test:
 
-```r
+``` r
 test_that("is_leap_year() handles century years", {
   expect_false(is_leap_year(1900))
   expect_true(is_leap_year(2000))
@@ -225,20 +222,20 @@ It **fails** on 1900. The edge case is found *before* the code ships.
 
 ## Demo with TDD: pass again, then refactor
 
-:::{.fragment}
+::: fragment
 Make the new test pass:
 
-```r
+``` r
 is_leap_year <- function(year) {
   (year %% 4 == 0 & year %% 100 != 0) | year %% 400 == 0
 }
 ```
 :::
 
-:::{.fragment}
+::: fragment
 All tests pass. Refactor with a safety net, re-running the tests after each change:
 
-```r
+``` r
 is_leap_year <- function(year) {
   divisible_by <- function(n) year %% n == 0
   (divisible_by(4) & !divisible_by(100)) | divisible_by(400)
@@ -246,40 +243,205 @@ is_leap_year <- function(year) {
 ```
 :::
 
+## TDD for a seg function: dissimilarity index
+
+::: fragment
+The goal is to create a function `dissim(data)`, where `data` is a two-column data frame of **counts**, with one row per spatial unit.
+
+``` r
+integrated <- data.frame(
+  group_a = c(10, 20),
+  group_b = c(10, 20)
+)
+```
+:::
+
+## TDD for a seg function: write first test
+
+::: fragment
+**Requirement:** identical distributions have (D = 0).
+
+``` r
+test_that("identical distributions give D = 0", {
+  integrated <- data.frame(
+    group_a = c(10, 20),
+    group_b = c(10, 20)
+  )
+
+  expect_equal(dissim(integrated), 0)
+})
+```
+
+``` r
+Error:
+! Test failed
+```
+
+The test **fails** because our function is not implemented.
+:::
+
+## TDD for a seg function: create function
+
+::: fragment
+Create the function with the smallest possible implementation:
+
+``` r
+dissim <- function(data) { 
+  0 
+}
+```
+
+The test **passes** even though this implementation is obviously wrong.
+:::
+
+## TDD for a seg function: second test with a known result
+
+::: fragment
+
+**New requirement:** different group distributions give the correct D.
+
+``` r
+test_that("a known uneven distribution gives D = 0.5", {
+  uneven <- data.frame(
+    group_a = c(30, 10),
+    group_b = c(10, 30)
+  )
+
+  expect_equal(dissim(uneven), 0.5)
+})
+```
+
+The new test **fails** because `dissim()` always returns 0.
+:::
+
+## TDD for a seg function: modify the function
+
+::: fragment
+Implement the formula
+
+``` r
+dissim <- function(data) {
+  a <- data[[1]]
+  b <- data[[2]]
+
+  sum(abs(a / sum(a) - b / sum(b))) / 2
+}
+```
+
+Run the two tests
+
+``` r
+test_that("identical distributions give D = 0", {
+  integrated <- data.frame(
+    group_a = c(10, 20),
+    group_b = c(10, 20)
+  )
+
+  expect_equal(dissim(integrated), 0)
+})
+
+test_that("a known uneven distribution gives D = 0.5", {
+  uneven <- data.frame(
+    group_a = c(30, 10),
+    group_b = c(10, 30)
+  )
+
+  expect_equal(dissim(uneven), 0.5)
+})
+```
+
+The two tests should now **pass**.
+:::
+
+## TDD for a seg function: check for invalid input
+
+::: fragment
+**New requirement:** population counts cannot be negative.
+
+``` r
+test_that("negative counts are rejected", {
+  invalid <- data.frame(
+    group_a = c(10, -1),
+    group_b = c(10,  1)
+  )
+
+  expect_error(dissim(invalid), "non-negative")
+})
+```
+
+The test should **fail**
+:::
+
+## TDD for a seg function: update function and test
+
+::: fragment
+Incorporate input check into the function and test again.
+
+``` r
+dissim <- function(data) {
+  if (any(data < 0)) {
+    stop("Counts must be non-negative.", call. = FALSE)
+  }
+
+  a <- data[[1]]
+  b <- data[[2]]
+  sum(abs(a / sum(a) - b / sum(b))) / 2
+}
+
+test_that("negative counts are rejected", {
+  invalid <- data.frame(
+    group_a = c(10, -1),
+    group_b = c(10,  1)
+  )
+
+  expect_error(dissim(invalid), "non-negative")
+})
+```
+
+The test now **passes**.
+:::
+
+## Word of caution: wrapping functions that already exist
+
+-   For this exercise, we developed a simplified function to calculate the Index of Dissimilarity, illustrating the principles of TDD.
+-   However, this index is already implemented in existing R packages, such as `seg`.
+-   In software development, we should generally **reuse or wrap existing functions rather than rewrite them**.
+-   Developing a new function should therefore be **justified by specific requirements that existing implementations do not meet**.
+
 ## Demo: non-TDD vs TDD
 
-| | Without TDD | With TDD |
-|---|---|---|
-| Speed at the start | Faster | Slower: tests come first |
-| Edge cases | Found by chance, if at all | Prompted by writing tests |
-| Checks are saved | No (console) | Yes (re-run any time) |
-| Refactoring | Risky | Safe, backed by tests |
-| Design | Shaped by the implementation | Shaped by how the code is used |
-| Effort | Less upfront | More upfront, less debugging later |
+|                    | Without TDD                  | With TDD                           |
+|------------------|-------------------------|-----------------------------|
+| Speed at the start | Faster                       | Slower: tests come first           |
+| Edge cases         | Found by chance, if at all   | Prompted by writing tests          |
+| Checks are saved   | No (console)                 | Yes (re-run any time)              |
+| Refactoring        | Risky                        | Safe, backed by tests              |
+| Design             | Shaped by the implementation | Shaped by how the code is used     |
+| Effort             | Less upfront                 | More upfront, less debugging later |
 
 ## Why TDD in this workshop?
 
-- Writing the test first makes our expectations explicit before any code exists
-- It lets us practise the fail-pass-refactor cycle in small steps
-- The tests we write remain in the package and protect it as it grows
+-   Writing the test first makes our expectations explicit before any code exists
+-   It lets us practise the fail-pass-refactor cycle in small steps
+-   The tests we write remain in the package and protect it as it grows
 
 ## TDD in R Packages
 
-- Writing the tests in `tests/testthat/` and the code in `R/`
-- Keeping code coverage high
-- Data considerations: usage rights, small size, working with synthetic data and mock tests
+-   Writing the tests in `tests/testthat/` and the code in `R/`
+-   Keeping code coverage high
+-   Data considerations: usage rights, small size, working with synthetic data and mock tests
 
 # Time to apply TDD in our package
 
 ## Roadmap: what happens after this?
 
-- Software design
-- Refactoring
-- Applying [statistical standards](https://stats-devguide.ropensci.org/)
+-   Software design
+-   Refactoring
+-   Applying [statistical standards](https://stats-devguide.ropensci.org/)
 
 ## Resources
 
-- [Testing basics in R](https://r-pkgs.org/testing-basics.html)
-- [Test-Driven Development in R](https://rstudio-pubs-static.s3.amazonaws.com/278724_4d8935a2955c49d9934e2113c737e70e.html)
-- [Unit-Testing And Test-driven Development (part of the Software Carpentry workshop FAIR-ifying R Software)](https://tibhannover.github.io/FAIR-R/05-testthat/)
-- [Video demonstration of test driven development in R with testthat](https://www.youtube.com/watch?app=desktop&v=TaNvqwMmHus)
+-   [Testing basics in R](https://r-pkgs.org/testing-basics.html)
+-   [Test-Driven Development in R](https://rstudio-pubs-static.s3.amazonaws.com/278724_4d8935a2955c49d9934e2113c737e70e.html)
+-   [Unit-Testing And Test-driven Development (part of the Software Carpentry workshop FAIR-ifying R Software)](https://tibhannover.github.io/FAIR-R/05-testthat/)
+-   [Video demonstration of test driven development in R with testthat](https://www.youtube.com/watch?app=desktop&v=TaNvqwMmHus)
