@@ -424,21 +424,145 @@ R/rescale01.R: 66.67%</code></pre>
 <span id="cb16-4"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="writing-tests-with-genai" class="slide level2">
-<h2>Writing tests with GenAI</h2>
+<section id="tdd-for-a-seg-function-dissimilarity-index" class="slide level2">
+<h2>TDD for a seg function: dissimilarity index</h2>
+<div class="fragment">
+<p>The goal is to create a function <code>dissim(data)</code>, where <code>data</code> is a two-column data frame of <strong>counts</strong>, with one row per spatial unit.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>integrated <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb17-2"><a href=""></a>  <span class="at">group_a =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>),</span>
+<span id="cb17-3"><a href=""></a>  <span class="at">group_b =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>)</span>
+<span id="cb17-4"><a href=""></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="tdd-for-a-seg-function-write-first-test" class="slide level2">
+<h2>TDD for a seg function: write first test</h2>
+<div class="fragment">
+<p><strong>Requirement:</strong> identical distributions have (D = 0).</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a><span class="fu">test_that</span>(<span class="st">"identical distributions give D = 0"</span>, {</span>
+<span id="cb18-2"><a href=""></a>  integrated <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb18-3"><a href=""></a>    <span class="at">group_a =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>),</span>
+<span id="cb18-4"><a href=""></a>    <span class="at">group_b =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>)</span>
+<span id="cb18-5"><a href=""></a>  )</span>
+<span id="cb18-6"><a href=""></a></span>
+<span id="cb18-7"><a href=""></a>  <span class="fu">expect_equal</span>(<span class="fu">dissim</span>(integrated), <span class="dv">0</span>)</span>
+<span id="cb18-8"><a href=""></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a>Error<span class="sc">:</span></span>
+<span id="cb19-2"><a href=""></a><span class="sc">!</span> Test failed</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The test <strong>fails</strong> because our function is not implemented.</p>
+</div>
+</section>
+<section id="tdd-for-a-seg-function-create-function" class="slide level2">
+<h2>TDD for a seg function: create function</h2>
+<div class="fragment">
+<p>Create the function with the smallest possible implementation:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a>dissim <span class="ot">&lt;-</span> <span class="cf">function</span>(data) { </span>
+<span id="cb20-2"><a href=""></a>  <span class="dv">0</span> </span>
+<span id="cb20-3"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The test <strong>passes</strong> even though this implementation is obviously wrong.</p>
+</div>
+</section>
+<section id="tdd-for-a-seg-function-second-test-with-a-known-result" class="slide level2">
+<h2>TDD for a seg function: second test with a known result</h2>
+<div class="fragment">
+<p><strong>New requirement:</strong> different group distributions give the correct D.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a><span class="fu">test_that</span>(<span class="st">"a known uneven distribution gives D = 0.5"</span>, {</span>
+<span id="cb21-2"><a href=""></a>  uneven <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb21-3"><a href=""></a>    <span class="at">group_a =</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">10</span>),</span>
+<span id="cb21-4"><a href=""></a>    <span class="at">group_b =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">30</span>)</span>
+<span id="cb21-5"><a href=""></a>  )</span>
+<span id="cb21-6"><a href=""></a></span>
+<span id="cb21-7"><a href=""></a>  <span class="fu">expect_equal</span>(<span class="fu">dissim</span>(uneven), <span class="fl">0.5</span>)</span>
+<span id="cb21-8"><a href=""></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The new test <strong>fails</strong> because <code>dissim()</code> always returns 0.</p>
+</div>
+</section>
+<section id="tdd-for-a-seg-function-modify-the-function" class="slide level2">
+<h2>TDD for a seg function: modify the function</h2>
+<div class="fragment">
+<p>Implement the formula</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>dissim <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb22-2"><a href=""></a>  a <span class="ot">&lt;-</span> data[[<span class="dv">1</span>]]</span>
+<span id="cb22-3"><a href=""></a>  b <span class="ot">&lt;-</span> data[[<span class="dv">2</span>]]</span>
+<span id="cb22-4"><a href=""></a></span>
+<span id="cb22-5"><a href=""></a>  <span class="fu">sum</span>(<span class="fu">abs</span>(a <span class="sc">/</span> <span class="fu">sum</span>(a) <span class="sc">-</span> b <span class="sc">/</span> <span class="fu">sum</span>(b))) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb22-6"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Run the two tests</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a><span class="fu">test_that</span>(<span class="st">"identical distributions give D = 0"</span>, {</span>
+<span id="cb23-2"><a href=""></a>  integrated <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb23-3"><a href=""></a>    <span class="at">group_a =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>),</span>
+<span id="cb23-4"><a href=""></a>    <span class="at">group_b =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>)</span>
+<span id="cb23-5"><a href=""></a>  )</span>
+<span id="cb23-6"><a href=""></a></span>
+<span id="cb23-7"><a href=""></a>  <span class="fu">expect_equal</span>(<span class="fu">dissim</span>(integrated), <span class="dv">0</span>)</span>
+<span id="cb23-8"><a href=""></a>})</span>
+<span id="cb23-9"><a href=""></a></span>
+<span id="cb23-10"><a href=""></a><span class="fu">test_that</span>(<span class="st">"a known uneven distribution gives D = 0.5"</span>, {</span>
+<span id="cb23-11"><a href=""></a>  uneven <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb23-12"><a href=""></a>    <span class="at">group_a =</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">10</span>),</span>
+<span id="cb23-13"><a href=""></a>    <span class="at">group_b =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">30</span>)</span>
+<span id="cb23-14"><a href=""></a>  )</span>
+<span id="cb23-15"><a href=""></a></span>
+<span id="cb23-16"><a href=""></a>  <span class="fu">expect_equal</span>(<span class="fu">dissim</span>(uneven), <span class="fl">0.5</span>)</span>
+<span id="cb23-17"><a href=""></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The two tests should now <strong>pass</strong>.</p>
+</div>
+</section>
+<section id="tdd-for-a-seg-function-check-for-invalid-input" class="slide level2">
+<h2>TDD for a seg function: check for invalid input</h2>
+<div class="fragment">
+<p><strong>New requirement:</strong> population counts cannot be negative.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a><span class="fu">test_that</span>(<span class="st">"negative counts are rejected"</span>, {</span>
+<span id="cb24-2"><a href=""></a>  invalid <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb24-3"><a href=""></a>    <span class="at">group_a =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="sc">-</span><span class="dv">1</span>),</span>
+<span id="cb24-4"><a href=""></a>    <span class="at">group_b =</span> <span class="fu">c</span>(<span class="dv">10</span>,  <span class="dv">1</span>)</span>
+<span id="cb24-5"><a href=""></a>  )</span>
+<span id="cb24-6"><a href=""></a></span>
+<span id="cb24-7"><a href=""></a>  <span class="fu">expect_error</span>(<span class="fu">dissim</span>(invalid), <span class="st">"non-negative"</span>)</span>
+<span id="cb24-8"><a href=""></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The test should <strong>fail</strong></p>
+</div>
+</section>
+<section id="tdd-for-a-seg-function-update-function-and-test" class="slide level2">
+<h2>TDD for a seg function: update function and test</h2>
+<div class="fragment">
+<p>Incorporate input check into the function and test again.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>dissim <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb25-2"><a href=""></a>  <span class="cf">if</span> (<span class="fu">any</span>(data <span class="sc">&lt;</span> <span class="dv">0</span>)) {</span>
+<span id="cb25-3"><a href=""></a>    <span class="fu">stop</span>(<span class="st">"Counts must be non-negative."</span>, <span class="at">call. =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb25-4"><a href=""></a>  }</span>
+<span id="cb25-5"><a href=""></a></span>
+<span id="cb25-6"><a href=""></a>  a <span class="ot">&lt;-</span> data[[<span class="dv">1</span>]]</span>
+<span id="cb25-7"><a href=""></a>  b <span class="ot">&lt;-</span> data[[<span class="dv">2</span>]]</span>
+<span id="cb25-8"><a href=""></a>  <span class="fu">sum</span>(<span class="fu">abs</span>(a <span class="sc">/</span> <span class="fu">sum</span>(a) <span class="sc">-</span> b <span class="sc">/</span> <span class="fu">sum</span>(b))) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb25-9"><a href=""></a>}</span>
+<span id="cb25-10"><a href=""></a></span>
+<span id="cb25-11"><a href=""></a><span class="fu">test_that</span>(<span class="st">"negative counts are rejected"</span>, {</span>
+<span id="cb25-12"><a href=""></a>  invalid <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb25-13"><a href=""></a>    <span class="at">group_a =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="sc">-</span><span class="dv">1</span>),</span>
+<span id="cb25-14"><a href=""></a>    <span class="at">group_b =</span> <span class="fu">c</span>(<span class="dv">10</span>,  <span class="dv">1</span>)</span>
+<span id="cb25-15"><a href=""></a>  )</span>
+<span id="cb25-16"><a href=""></a></span>
+<span id="cb25-17"><a href=""></a>  <span class="fu">expect_error</span>(<span class="fu">dissim</span>(invalid), <span class="st">"non-negative"</span>)</span>
+<span id="cb25-18"><a href=""></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The test now <strong>passes</strong>.</p>
+</div>
+</section>
+<section id="word-of-caution-wrapping-functions-that-already-exist" class="slide level2">
+<h2>Word of caution: wrapping functions that already exist</h2>
 <ul>
-<li>Effective in normal automated testing when functions to be tested are already written.</li>
-<li>Useful for creating simple synthetic data for tests.</li>
-<li>Potentially useful in TDD to scaffold a test, but you need to (be able to) check and adjust if needed.</li>
+<li>For this exercise, we developed a simplified function to calculate the Index of Dissimilarity, illustrating the principles of TDD.</li>
+<li>However, this index is already implemented in existing R packages, such as <code>seg</code>.</li>
+<li>In software development, we should generally <strong>reuse or wrap existing functions rather than rewrite them</strong>.</li>
+<li>Developing a new function should therefore be <strong>justified by specific requirements that existing implementations do not meet</strong>.</li>
 </ul>
 </section>
 <section id="demo-non-tdd-vs-tdd" class="slide level2">
 <h2>Demo: non-TDD vs TDD</h2>
 <table class="caption-top">
 <colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
+<col style="width: 25%">
+<col style="width: 34%">
+<col style="width: 40%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -495,6 +619,14 @@ R/rescale01.R: 66.67%</code></pre>
 <li>Writing the tests in <code>tests/testthat/</code> and the code in <code>R/</code></li>
 <li>Keeping code coverage high</li>
 <li>Data considerations: usage rights, small size, working with synthetic data and mock tests</li>
+</ul>
+</section>
+<section id="writing-tests-with-genai" class="slide level2">
+<h2>Writing tests with GenAI</h2>
+<ul>
+<li>Effective in normal automated testing when functions to be tested are already written.</li>
+<li>Useful for creating simple synthetic data for tests.</li>
+<li>Potentially useful in TDD to scaffold a test, but you need to (be able to) check and adjust if needed.</li>
 </ul>
 </section>
 <section>
