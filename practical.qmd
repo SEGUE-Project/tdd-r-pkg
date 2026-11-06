@@ -182,9 +182,10 @@ calculate_group_shares <- function(data) {
 devtools::test()
 ```
 
-> IMPORTANT: to avoid any conflicts, in the `tests/testthat/test-segue.R` file **delete the example tests we developed during the code along session and write down your own tests.**
+8.  **Now it is your turn to develop your test(s) and function(s)**
 
-8.  Once you are done, add your name to the `DESCRIPTION` file following this template:
+
+9.  Once you are done, add your name to the `DESCRIPTION` file following this template:
 
 ```         
 Authors@R: c(  # <- Under this seciton
@@ -192,6 +193,6 @@ Authors@R: c(  # <- Under this seciton
            comment = c(ORCID = "0000-0003-3218-5102")),  # <- and this line
 ```
 
-9.  Commit your changes and push them to GitHub (instructions to be added)
+10.  Commit your changes and push them to GitHub
 
-10.  Open a Pull Request from your fork (instructions to be added)
+11.  Open a **Pull Request from your fork**
