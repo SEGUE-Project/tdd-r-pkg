@@ -265,7 +265,7 @@ is_leap_year <- function(year) {
 ```
 :::
 
-## TDD for a seg function: dissimilarity index
+## TDD for a segregration function: dissimilarity index
 
 ::: fragment
 The goal is to create a function `dissim(data)`, where `data` is a two-column data frame of **counts**, with one row per spatial unit.
@@ -278,7 +278,7 @@ integrated <- data.frame(
 ```
 :::
 
-## TDD for a seg function: write first test
+## TDD for a segregration function: write first test
 
 ::: fragment
 **Requirement:** identical distributions have (D = 0).
@@ -302,7 +302,7 @@ Error:
 The test **fails** because our function is not implemented.
 :::
 
-## TDD for a seg function: create function
+## TDD for a segregration function: create function
 
 ::: fragment
 Create the function with the smallest possible implementation:
@@ -316,7 +316,7 @@ dissim <- function(data) {
 The test **passes** even though this implementation is obviously wrong.
 :::
 
-## TDD for a seg function: second test with a known result
+## TDD for a segregration function: second test with a known result
 
 ::: fragment
 
@@ -333,10 +333,15 @@ test_that("a known uneven distribution gives D = 0.5", {
 })
 ```
 
+``` r
+Error:
+! Test failed
+```
+
 The new test **fails** because `dissim()` always returns 0.
 :::
 
-## TDD for a seg function: modify the function
+## TDD for a segregration function: modify the function
 
 ::: fragment
 Implement the formula
@@ -349,7 +354,11 @@ dissim <- function(data) {
   sum(abs(a / sum(a) - b / sum(b))) / 2
 }
 ```
+:::
 
+## TDD for a segregration function: re-run the tests
+
+::: fragment
 Run the two tests
 
 ``` r
@@ -371,11 +380,14 @@ test_that("a known uneven distribution gives D = 0.5", {
   expect_equal(dissim(uneven), 0.5)
 })
 ```
+``` r
+Test passed 🥇
+```
 
-The two tests should now **pass**.
+The two tests now **pass**.
 :::
 
-## TDD for a seg function: check for invalid input
+## TDD for a segregration function: check for invalid input
 
 ::: fragment
 **New requirement:** population counts cannot be negative.
@@ -391,10 +403,15 @@ test_that("negative counts are rejected", {
 })
 ```
 
-The test should **fail**
+``` r
+Error:
+! Test failed
+```
+
+The test **fails**
 :::
 
-## TDD for a seg function: update function and test
+## TDD for a segregration function: update function and test
 
 ::: fragment
 Incorporate input check into the function and test again.
@@ -427,7 +444,7 @@ The test now **passes**.
 
 -   For this exercise, we developed a simplified function to calculate the Index of Dissimilarity, illustrating the principles of TDD.
 -   However, this index is already implemented in existing R packages, such as `seg`.
--   In software development, we should generally **reuse or wrap existing functions rather than rewrite them**.
+-   In software development, we should generally **reuse existing functions rather than rewrite them**.
 -   Developing a new function should therefore be **justified by specific requirements that existing implementations do not meet**.
 
 ## Demo: non-TDD vs TDD
