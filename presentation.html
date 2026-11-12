@@ -230,15 +230,16 @@ Ignacio Urria Yáñez <a href="https://orcid.org/0000-0003-3218-5102" class="qua
 <section id="why-test" class="slide level2">
 <h2>Why test?</h2>
 <ul>
-<li>Shift from <em>ad hoc</em> testing in the console to automated testing</li>
-<li>Ensure code correctness</li>
-<li>Reduce the chance of bugs</li>
-<li>Prevent regression and ensure continuity</li>
-<li>Anticipate how the code behaves with unexpected input</li>
-<li>Avoid making the same mistake again</li>
-<li>Enforce good code structure</li>
-<li>Make expectations explicit, even before code is written (we will do this)</li>
+<li class="fragment">Shift from <em>ad hoc</em> testing in the console to automated testing</li>
+<li class="fragment">Ensure code correctness</li>
+<li class="fragment">Reduce the chance of bugs</li>
+<li class="fragment">Prevent regression and ensure continuity</li>
+<li class="fragment">Anticipate how the code behaves with unexpected input</li>
+<li class="fragment">Avoid making the same mistake again</li>
+<li class="fragment">Enforce good code structure</li>
+<li class="fragment">Make expectations explicit, even before code is written (we will do this)</li>
 </ul>
+<div class="fragment">
 <br><br>
 <h4>
 When not to test?
@@ -246,14 +247,16 @@ When not to test?
 <ul>
 <li>During exploratory analysis, one-off code, when cost of testing outweighs its benefits.</li>
 </ul>
+</div>
 </section>
 <section id="types-of-tests" class="slide level2">
 <h2>Types of tests</h2>
 <ul>
-<li><strong>Unit tests</strong> check that each function / unit of code does what it is supposed to do given example input.</li>
-<li><strong>Property-based (fuzz) tests</strong> generate unexpected inputs with given properties.</li>
-<li><strong>Mutation tests</strong> introduce small changes (“mutations”) in the code and checks if the tests catch them. If tests pass, you have found a bug!</li>
+<li class="fragment"><strong>Unit tests</strong> check that each function / unit of code does what it is supposed to do given example input.</li>
+<li class="fragment"><strong>Property-based (fuzz) tests</strong> generate unexpected inputs with given properties.</li>
+<li class="fragment"><strong>Mutation tests</strong> introduce small changes (“mutations”) in the code and checks if the tests catch them. If tests pass, you have found a bug!</li>
 </ul>
+<div class="fragment">
 <br><br>
 <h4>
 Useful metric for testing
@@ -261,16 +264,20 @@ Useful metric for testing
 <ul>
 <li><strong>Code coverage</strong> checks the percentage of lines of code covered by tests.</li>
 </ul>
+</div>
 </section>
 <section id="unit-tests-example" class="slide level2">
 <h2>Unit tests: example</h2>
 <blockquote>
 <p><strong>Unit tests</strong> check that each function / unit of code does what it is supposed to do given example input.</p>
 </blockquote>
+<div class="fragment">
 <p>The function to test, in <code>R/is_adult.R</code>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>is_adult <span class="ot">&lt;-</span> <span class="cf">function</span>(age) {</span>
 <span id="cb1-2"><a href=""></a>  age <span class="sc">&gt;=</span> <span class="dv">18</span></span>
 <span id="cb1-3"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="fragment">
 <p>The tests, in <code>tests/testthat/test-is_adult.R</code>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="fu">test_that</span>(<span class="st">"is_adult() recognises adults and minors"</span>, {</span>
 <span id="cb2-2"><a href=""></a>  <span class="fu">expect_true</span>(<span class="fu">is_adult</span>(<span class="dv">30</span>))</span>
@@ -280,16 +287,20 @@ Useful metric for testing
 <span id="cb2-6"><a href=""></a><span class="fu">test_that</span>(<span class="st">"is_adult() treats 18 as an adult"</span>, {</span>
 <span id="cb2-7"><a href=""></a>  <span class="fu">expect_true</span>(<span class="fu">is_adult</span>(<span class="dv">18</span>))</span>
 <span id="cb2-8"><a href=""></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </section>
 <section id="property-based-tests-example" class="slide level2">
 <h2>Property-based tests: example</h2>
 <blockquote>
 <p><strong>Property-based (fuzz) tests</strong> generate unexpected inputs with given properties.</p>
 </blockquote>
+<div class="fragment">
 <p>The function to test:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>rescale01 <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
 <span id="cb3-2"><a href=""></a>  (x <span class="sc">-</span> <span class="fu">min</span>(x)) <span class="sc">/</span> (<span class="fu">max</span>(x) <span class="sc">-</span> <span class="fu">min</span>(x))</span>
 <span id="cb3-3"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="fragment">
 <p>Instead of fixed inputs, test a <strong>property</strong> on many generated inputs (here with the <a href="https://github.com/armcn/quickcheck">quickcheck</a> package):</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">library</span>(quickcheck)</span>
 <span id="cb4-2"><a href=""></a></span>
@@ -301,13 +312,17 @@ Useful metric for testing
 <span id="cb4-8"><a href=""></a>    }</span>
 <span id="cb4-9"><a href=""></a>  )</span>
 <span id="cb4-10"><a href=""></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="fragment">
 <p>Generated inputs can expose cases we did not think of, e.g.&nbsp;a constant vector (<code>max(x) == min(x)</code>) gives <code>NaN</code>.</p>
+</div>
 </section>
 <section id="mutation-tests-example" class="slide level2">
 <h2>Mutation tests: example</h2>
 <blockquote>
 <p><strong>Mutation tests</strong> introduce small changes (“mutations”) in the code and checks if the tests catch them. If tests pass, you have found a bug!</p>
 </blockquote>
+<div class="fragment">
 <p>A mutation tool makes a small change to the code and re-runs the tests:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="co"># Original</span></span>
 <span id="cb5-2"><a href=""></a>is_adult <span class="ot">&lt;-</span> <span class="cf">function</span>(age) age <span class="sc">&gt;=</span> <span class="dv">18</span></span>
@@ -319,6 +334,7 @@ Useful metric for testing
 <li>Adding <code>expect_true(is_adult(18))</code> makes the tests fail on the mutant.</li>
 </ul>
 <p>Tools: <a href="https://github.com/jakubsob/muttest">muttest</a> for R.</p>
+</div>
 </section>
 <section id="code-coverage-example" class="slide level2">
 <h2>Code coverage: example</h2>
@@ -628,11 +644,7 @@ R/rescale01.R: 66.67%</code></pre>
 <li>Useful for creating simple synthetic data for tests.</li>
 <li>Potentially useful in TDD to scaffold a test, but you need to (be able to) check and adjust if needed.</li>
 </ul>
-</section>
-<section>
-<section id="time-to-apply-tdd-in-our-package" class="title-slide slide level1 center">
-<h1>Time to apply TDD in our package</h1>
-
+<!-- # Time to apply TDD in our package -->
 </section>
 <section id="roadmap-what-happens-after-this" class="slide level2">
 <h2>Roadmap: what happens after this?</h2>
@@ -651,7 +663,7 @@ R/rescale01.R: 66.67%</code></pre>
 <li><a href="https://www.youtube.com/watch?app=desktop&amp;v=TaNvqwMmHus">Video demonstration of test driven development in R with testthat</a></li>
 </ul>
 
-</section></section>
+</section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">

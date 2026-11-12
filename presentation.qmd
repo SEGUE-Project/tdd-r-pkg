@@ -23,6 +23,8 @@ author:
 
 ## Why test?
 
+::: {.incremental}
+
 - Shift from *ad hoc* testing in the console to automated testing
 - Ensure code correctness
 - Reduce the chance of bugs
@@ -32,25 +34,41 @@ author:
 - Enforce good code structure
 - Make expectations explicit, even before code is written (we will do this)
 
+:::
+
+::: fragment
+
 <br><br>
 <h4>When not to test?</h4>
 
 - During exploratory analysis, one-off code, when cost of testing outweighs its benefits.
 
+:::
+
 ## Types of tests
+
+::: {.incremental}
 
 - **Unit tests** check that each function / unit of code does what it is supposed to do given example input.
 - **Property-based (fuzz) tests** generate unexpected inputs with given properties.
 - **Mutation tests** introduce small changes ("mutations") in the code and checks if the tests catch them. If tests pass, you have found a bug!
+
+:::
+
+::: fragment
 
 <br><br>
 <h4>Useful metric for testing</h4>
 
 - **Code coverage** checks the percentage of lines of code covered by tests.
 
+:::
+
 ## Unit tests: example
 
 > **Unit tests** check that each function / unit of code does what it is supposed to do given example input.
+
+::: fragment
 
 The function to test, in `R/is_adult.R`:
 
@@ -59,6 +77,9 @@ is_adult <- function(age) {
   age >= 18
 }
 ```
+:::
+
+::: fragment
 
 The tests, in `tests/testthat/test-is_adult.R`:
 
@@ -72,10 +93,13 @@ test_that("is_adult() treats 18 as an adult", {
   expect_true(is_adult(18))
 })
 ```
+:::
 
 ## Property-based tests: example
 
 > **Property-based (fuzz) tests** generate unexpected inputs with given properties.
+
+::: fragment
 
 The function to test:
 
@@ -84,6 +108,9 @@ rescale01 <- function(x) {
   (x - min(x)) / (max(x) - min(x))
 }
 ```
+:::
+
+::: fragment
 
 Instead of fixed inputs, test a **property** on many generated inputs (here with the [quickcheck](https://github.com/armcn/quickcheck) package):
 
@@ -99,12 +126,19 @@ test_that("rescale01() returns values between 0 and 1", {
   )
 })
 ```
+:::
+
+::: fragment
 
 Generated inputs can expose cases we did not think of, e.g. a constant vector (`max(x) == min(x)`) gives `NaN`.
+
+:::
 
 ## Mutation tests: example
 
 > **Mutation tests** introduce small changes ("mutations") in the code and checks if the tests catch them. If tests pass, you have found a bug!
+
+::: fragment
 
 A mutation tool makes a small change to the code and re-runs the tests:
 
@@ -120,6 +154,8 @@ is_adult <- function(age) age > 18
 -   Adding `expect_true(is_adult(18))` makes the tests fail on the mutant.
 
 Tools: [muttest](https://github.com/jakubsob/muttest) for R.
+
+:::
 
 ## Code coverage: example
 
@@ -459,7 +495,7 @@ The test now **passes**.
 - Useful for creating simple synthetic data for tests.
 - Potentially useful in TDD to scaffold a test, but you need to (be able to) check and adjust if needed.
 
-# Time to apply TDD in our package
+<!-- # Time to apply TDD in our package -->
 
 ## Roadmap: what happens after this?
 
